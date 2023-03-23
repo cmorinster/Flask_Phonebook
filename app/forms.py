@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField
-from wtforms.validators import InputRequired, EqualTo
+from wtforms import StringField, SubmitField
+from wtforms.validators import InputRequired
 
 
 class AddNumber(FlaskForm):
