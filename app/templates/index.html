@@ -3,19 +3,69 @@
 {% block title %} Home {% endblock %}
 
 {% block header %}
-    <h1>Adress Book!</h1>
-    <h5>Please fill out the form to add phone numbers</h5>
-    
+    <h1>Address Book!</h1>
+    {% if current_user.is_authenticated %}
+        <h5>Nice to see you again, {{ current_user.username }}!</h5>
+    {% else %}
+        <h5>Please Sign Up or Log In to Add new contacts</h5>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
+{% if current_user.is_authenticated %}
     <div class="row">
+        <!-- Left 2/3 Column -->
         <div class="col-12">
-            <h5>Welcome to your one stop shop for adding phone numbers, click the link above to begin</h5>
+            
+            {% for phone in phonebook %}
+                <div class="card mt-3">
+                    <div class="row g-0">
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h6 class="card-subtitle text-muted">Name: {{ phone.first_name }} {{ phone.last_name }}</h6>
+                                <h5 class="card-title">Phone: {{ phone.phone_number }}</h5>
+                                <h6 class="card-subtitle">Address: {{ phone.address }}</h6>
+                                <p class="card-text">Added by: {{ phone.user.username }}</p>
+                                {% if phone.user == current_user %}
+                                    <a href="{{ url_for('edit_phone', phone_id=phone.id) }}" class="btn btn-success">Edit</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal-{{ phone.id }}">
+                                        Delete
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Modal -->
+                <div class="modal fade" id="deletePhoneModal-{{ phone.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete {{ phone.first_name }} {{ phone.last_name }}?</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Are you sure you want to delete {{ phone.first_name }} {{ phone.last_name }}? This action cannot be undone.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="{{ url_for('delete_phone', phone_id=phone.id) }}" class="btn btn-danger">Delete Post</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
 
 
         </div>
 
+
     </div>
+    {% else %}
+    <div class="row">
+        <H1>Welcome to the phonebook app LOGIN TO BEGIN!</H1>
+
+    </div>
+    {% endif %}
 {% endblock %}
