@@ -8,7 +8,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 def index():
     pbook = PhoneBook.query.all()
     #form = PhoneBook()
-    pbook = db.session.execute(db.select(PhoneBook).where((PhoneBook.user_id.ilike(f"%{current_user.id}"))))
+    #pbook = db.session.execute(db.select(PhoneBook).where((PhoneBook.user_id == current_user.id)))
     return render_template('index.html', pbook=pbook)
 
 
@@ -49,9 +49,10 @@ def edit_phone(phone_id):
         return redirect(url_for('index'))
 
     
-    form.title.data = phone_to_edit.title
-    form.body.data = phone_to_edit.body
-    form.image_url.data = phone_to_edit.image_url
+    form.first_name.data = phone_to_edit.first_name
+    form.last_name.data = phone_to_edit.last_name
+    form.phone_number.data = phone_to_edit.phone_number
+    form.address.data = phone_to_edit.address
     return render_template('edit.html', form=form, pbook=phone_to_edit)
 
 

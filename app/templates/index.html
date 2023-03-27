@@ -15,22 +15,18 @@
 {% if current_user.is_authenticated %}
     <div class="row">
         <div class="col-12">
-            
             {% for phone in pbook %}
                 <div class="card mt-3">
                     <div class="row g-0">
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h6 class="card-subtitle text-muted">Name: {{ phone.first_name }} {{ phone.last_name }}</h6>
-                                <h5 class="card-title">Phone: {{ phone.phone_number }}</h5>
+                                <h6 class="card-title">Phone: {{ phone.phone_number }}</h5>
                                 <h6 class="card-subtitle">Address: {{ phone.address }}</h6>
-                                <p class="card-text">Added by: {{ phone.user.username }}</p>
-                                {% if phone.user == current_user %}
                                     <a href="{{ url_for('edit_phone', phone_id=phone.id) }}" class="btn btn-success">Edit</a>
                                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal-{{ phone.id }}">
                                         Delete
                                     </button>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
