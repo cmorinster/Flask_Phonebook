@@ -14,10 +14,9 @@
 {% block content %}
 {% if current_user.is_authenticated %}
     <div class="row">
-        <!-- Left 2/3 Column -->
         <div class="col-12">
             
-            {% for phone in phonebook %}
+            {% for phone in pbook %}
                 <div class="card mt-3">
                     <div class="row g-0">
                         <div class="col-md-8">

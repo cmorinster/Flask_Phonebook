@@ -7,7 +7,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 @app.route('/', methods=["GET", "POST"])
 def index():
     pbook = PhoneBook.query.all()
-    return render_template('index.html', pbook = pbook)
+    #form = PhoneBook()
+    pbook = db.session.execute(db.select(PhoneBook).where((PhoneBook.user_id.ilike(f"%{current_user.id}"))))
+    return render_template('index.html', pbook=pbook)
 
 
 @app.route('/phonebook', methods=["GET", "POST"])
@@ -18,8 +20,9 @@ def addnumber():
         last_name = form.last_name.data
         phone_number = form.phone_number.data
         address = form.address.data
+        user_id = current_user.id
         print(first_name, last_name, phone_number, address)
-        new_user = PhoneBook(first_name=first_name, last_name=last_name, phone_number=phone_number, address=address)
+        new_user = PhoneBook(first_name=first_name, last_name=last_name, phone_number=phone_number, address=address, user_id = current_user.id)
         flash(f"{new_user.first_name} has been added!", "success")
         return redirect(url_for('index'))
     return render_template('phonebook.html', form=form)
@@ -61,7 +64,7 @@ def signup():
         password = form.password.data
         print(username, password)
         check_user = db.session.execute(db.select(User).filter((User.username == username)))
-        if check_user:
+        if check_user==True:
             flash("A user with that username and/or email already exists", "warning")
             return redirect(url_for('signup'))
         new_user = User(username=username, password=password)
@@ -83,7 +86,7 @@ def login():
         if user is not None and user.check_password(password):
             login_user(user)
             flash(f'You have successfully logged in as {username}', 'success')
-            return redirect(url_for('book_individual'))
+            return redirect(url_for('index'))
         else:
             flash('Invalid username and/or password. Please try again', 'danger')
             return redirect(url_for('login'))
