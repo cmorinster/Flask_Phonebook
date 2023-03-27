@@ -8,7 +8,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 def index():
     pbook = PhoneBook.query.all()
     #form = PhoneBook()
-    #pbook = db.session.execute(db.select(PhoneBook).where((PhoneBook.user_id == current_user.id)))
+    print(PhoneBook.user_id)
+    print(current_user.id)
+    pbook = PhoneBook.query.filter(PhoneBook.user_id == current_user.id)
     return render_template('index.html', pbook=pbook)
 
 
